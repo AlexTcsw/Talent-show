@@ -1,0 +1,54 @@
+import customtkinter as ctk
+
+# 1. SETUP THE WORLD
+ctk.set_appearance_mode("dark")
+root = ctk.CTk()
+root.geometry("600x600")
+root.title("Code Club: Talent Show Edition")
+
+# 2. THE JOKE FUNCTIONS
+def tell_joke():
+    Label.configure(text="Why did the laptop go to the doctor?")
+    JokeButton.configure(text="See Answer", command=show_punchline)
+
+def show_punchline():
+    Label.configure(text="Because it had a virus! 🦠")
+    JokeButton.configure(text="Tell another?", command=tell_joke)
+
+# 3. THE CREDITS FUNCTION (Fixed Indentation)
+def show_credits():
+    # Create the window
+    credits_window = ctk.CTkToplevel(root)
+    credits_window.title("Meet the Squad")
+    credits_window.geometry("400x400")
+    
+    # The Fix: Keeps window on top and active
+    credits_window.lift()          
+    credits_window.focus_force()   
+    credits_window.attributes("-topmost", True)
+
+    # Add the Names
+    title = ctk.CTkLabel(credits_window, text="THE CODE CLUB", font=("Arial", 22, "bold"))
+    title.pack(pady=20)
+    
+    ctk.CTkLabel(credits_window, text="Alex: Lead Developer", font=("Arial", 16)).pack(pady=10)
+    ctk.CTkLabel(credits_window, text="Wyatt: Systems Tester", font=("Arial", 16)).pack(pady=10)
+    ctk.CTkLabel(credits_window, text="Daymein: Creative Director", font=("Arial", 16)).pack(pady=10)
+    
+    # Close Button
+    close_btn = ctk.CTkButton(credits_window, text="Back to App", command=credits_window.destroy)
+    close_btn.pack(pady=30)
+
+# 4. THE UI WIDGETS
+Label = ctk.CTkLabel(root, text="Hi Welcome", font=("Arial", 24))
+Label.pack(pady=60)
+
+JokeButton = ctk.CTkButton(root, text="Click for a Joke", command=tell_joke)
+JokeButton.pack(pady=10)
+
+# The Squad Button
+CreditsButton = ctk.CTkButton(root, text="Meet the Team", command=show_credits, fg_color="green", hover_color="darkgreen")
+CreditsButton.pack(pady=10)
+
+# 5. THE FINISH LINE
+root.mainloop()

@@ -1,16 +1,33 @@
 import customtkinter as ctk
+import os
+import sys
+import ctypes
 
-# 1. The Joke Database
+# 1. IDENTITY FIX (Tells Windows: "I am Code Club, not just Python")
+try:
+    myappid = 'centerburg.codeclub.talentshow.1' 
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+except:
+    pass
+
+# 2. PATH FIX (Tells the EXE: "Look inside yourself for the cat")
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+# 3. JOKE DATABASE
 jokes = [
     {"q": "Why did the laptop go to the doctor?", "a": "Because it had a virus!"},
     {"q": "Why do programmers prefer dark mode?", "a": "Because light attracts bugs."},
     {"q": "What do you call a fake noodle?", "a": "An Impasta!"},
     {"q": "How many programmers does it take to change a lightbulb?", "a": "None. It's a hardware problem."}
 ]
-
 current_joke = 0
 
-# 2. Functions
+# 4. FUNCTIONS
 def show_next_joke():
     global current_joke
     current_joke = (current_joke + 1) % len(jokes) 
@@ -23,26 +40,28 @@ def reveal_answer():
 def show_credits():
     credits_window = ctk.CTkToplevel(app)
     credits_window.title("The Squad")
-    credits_window.geometry("300x250")
-    credits_window.attributes("-topmost", True) # Keeps it above the main window
+    credits_window.geometry("300x280")
+    credits_window.attributes("-topmost", True) 
 
     ctk.CTkLabel(credits_window, text="CODE CLUB TEAM", font=("Arial", 16, "bold")).pack(pady=10)
     ctk.CTkLabel(credits_window, text="Alex: Lead Developer").pack()
-    ctk.CTkLabel(credits_window, text="Wyatt: Systems Tester").pack()
+    ctk.CTkLabel(credits_window, text="Wyatt: The Designer").pack()
     ctk.CTkLabel(credits_window, text="Daymein: Creative Director").pack()
-    
-    # Optional: Shoutout to your church in the credits?
-    # ctk.CTkLabel(credits_window, text="Supported by: Nova", font=("Arial", 10, "italic")).pack(pady=5)
-
     ctk.CTkButton(credits_window, text="Close", command=credits_window.destroy).pack(pady=15)
 
-# 3. Main GUI Setup
+# 5. MAIN GUI SETUP
 ctk.set_appearance_mode("dark") 
 app = ctk.CTk()
 app.title("Code Club: Talent Show Edition")
 app.geometry("600x500")
 
-# UI Elements
+# Set the Icon using the Path Fix
+try:
+    app.iconbitmap(resource_path("cat.ico"))
+except:
+    print("Icon not found, but keep going!")
+
+# 6. UI ELEMENTS (Make sure these are inside the app setup)
 question_label = ctk.CTkLabel(app, text=jokes[0]["q"], font=("Arial", 22, "bold"), wraplength=500)
 question_label.pack(pady=30)
 
@@ -58,4 +77,5 @@ next_btn.pack(pady=10)
 credits_btn = ctk.CTkButton(app, text="Meet the Team", command=show_credits, fg_color="purple", hover_color="#4B0082")
 credits_btn.pack(pady=30)
 
+# 7. RUN THE APP
 app.mainloop()
